@@ -8,5 +8,15 @@ templates = Jinja2Templates(directory="./src/y_social/server/templates")
 
 
 @router.get("/", response_class=HTMLResponse)
-async def index(request: Request):
+def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@router.get("/toggle-signup", response_class=HTMLResponse)
+def toggle_signup(request: Request):
+    return templates.TemplateResponse("signup.html", {"request": request})
+
+
+@router.get("/toggle-signin", response_class=HTMLResponse)
+def toggle_signin(request: Request):
+    return templates.TemplateResponse("signin.html", {"request": request})

@@ -38,6 +38,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
+    command: ["uvicorn", "y_social.server.main:app", "--host", "0.0.0.0", "--reload"]
   postgres:
     image: postgres:15.4-alpine
     environment:
