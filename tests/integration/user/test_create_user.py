@@ -12,9 +12,7 @@ async def test_create_user_inserts_record_into_user_table(
     postgres_connection: asyncpg.connection.Connection,
 ):
     user_repository = PostgresUserRepository(postgres_connection)
-    await user_repository.create_user(
-        UserIn(username="test", password="test", email="test@gmail.com")
-    )
+    await user_repository.create_user(UserIn(username="test", password="test"))
 
     result = await postgres_connection.fetch(
         """
@@ -32,9 +30,7 @@ async def test_create_user_returns_user_out(
     postgres_connection: asyncpg.connection.Connection,
 ):
     user_repository = PostgresUserRepository(postgres_connection)
-    result = await user_repository.create_user(
-        UserIn(username="test", password="test", email="test@gmail.com")
-    )
+    result = await user_repository.create_user(UserIn(username="test", password="test"))
 
     assert isinstance(result, UserOut)
 
@@ -46,8 +42,7 @@ async def test_register_endpoint_inserts_user_into_database(
     test_client: TestClient,
 ):
     response = test_client.post(
-        "/register",
-        data={"username": "test", "password": "test", "email": "test@gmail.com"},
+        "/register", data={"username": "test", "password": "test"}
     )
 
     assert response.status_code == 200
