@@ -33,7 +33,7 @@ async def register(
     password: str = Form(...),
 ):
     user = await user_repository.create_user(
-        UserIn(username=username, password=password, email="test@gmail.com")
+        UserIn(username=username, password=password)
     )
 
     return templates.TemplateResponse("feed.html", {"request": request, "user": user})

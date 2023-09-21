@@ -1,18 +1,16 @@
 import datetime
 
+from pydantic import BaseModel
 from abc import ABC, abstractmethod
-from pydantic import BaseModel, EmailStr
 
 
 class UserIn(BaseModel):
     username: str
     password: str
-    email: EmailStr
 
 
 class UserOut(BaseModel):
     username: str
-    email: EmailStr
     created_at: datetime.datetime
     updated_at: datetime.datetime
 
