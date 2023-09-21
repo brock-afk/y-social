@@ -16,6 +16,9 @@ class UserOut(BaseModel):
 
 
 class UserRepository(ABC):
+    class UserExistsError(Exception):
+        pass
+
     @abstractmethod
     async def create_user(self, user_in: UserIn) -> UserOut:
         pass  # pragma: no cover
