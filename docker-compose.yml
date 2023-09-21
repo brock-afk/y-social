@@ -34,6 +34,7 @@ services:
       - .:/app
     depends_on:
       - postgres
+    command: ["uvicorn", "y_social.server.main:app", "--host", "0.0.0.0", "--reload"]
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

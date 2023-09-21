@@ -32,8 +32,21 @@ async def register(
     username: str = Form(...),
     password: str = Form(...),
 ):
-    user = await user_repository.create_user(
-        UserIn(username=username, password=password)
-    )
-
-    return templates.TemplateResponse("feed.html", {"request": request, "user": user})
+    try:
+        user = await user_repository.create_user(
+            UserIn(username=username, password=password)
+        )
+    except user_repository.UserExistsError:
+        return templates.TemplateResponse(
+            "signup.html",
+            {
+                "request": request,
+                "user_exists_error": "User already exists",
+                "username": username,
+                "password": password,
+            },
+        )
+    else:
+        return templates.TemplateResponse(
+            "feed.html", {"request": request, "user": user}
+        )
