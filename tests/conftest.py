@@ -3,6 +3,10 @@ import pytest
 import asyncpg
 import asyncpg.connection
 
+from y_social.server.main import app
+from fastapi.testclient import TestClient
+from y_social.server.dependencies import db_connection
+
 
 @pytest.fixture
 async def postgres_connection() -> asyncpg.connection.Connection:
@@ -22,3 +26,8 @@ async def postgres_connection() -> asyncpg.connection.Connection:
     yield connection
 
     await connection.close()
+
+
+@pytest.fixture
+def test_client():
+    return TestClient(app)
