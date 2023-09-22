@@ -50,3 +50,30 @@ async def register(
         return templates.TemplateResponse(
             "feed.html", {"request": request, "user": user}
         )
+
+
+@router.post("/signin", response_class=HTMLResponse)
+async def signin(
+    request: Request,
+    user_repository: Annotated[UserRepository, Depends(user_repository)],
+    username: str = Form(...),
+    password: str = Form(...),
+):
+    try:
+        user = await user_repository.verify_user(
+            UserIn(username=username, password=password)
+        )
+    except user_repository.LoginError as e:
+        return templates.TemplateResponse(
+            "signin.html",
+            {
+                "request": request,
+                "error": str(e),
+                "username": username,
+                "password": password,
+            },
+        )
+    else:
+        return templates.TemplateResponse(
+            "feed.html", {"request": request, "user": user}
+        )
