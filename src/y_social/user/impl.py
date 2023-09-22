@@ -28,3 +28,25 @@ class PostgresUserRepository(UserRepository):
             raise self.UserExistsError(f"User {user_in.username} already exists")
 
         return UserOut(**result)
+
+    async def verify_user(self, user_in: UserIn) -> UserOut:
+        result = await self.db_connection.fetchrow(
+            """
+            SELECT username, password, created_at, updated_at
+            FROM user_accounts
+            WHERE username = $1
+            """,
+            user_in.username,
+        )
+
+        if result is None:
+            raise self.UserDoesNotExistError(f"User {user_in.username} does not exist")
+
+        if not self.password_hasher.verify(user_in.password, result["password"]):
+            raise self.InvalidPasswordError("Invalid password")
+
+        return UserOut(
+            username=result["username"],
+            created_at=result["created_at"],
+            updated_at=result["updated_at"],
+        )
