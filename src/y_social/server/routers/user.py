@@ -17,12 +17,12 @@ async def index(request: Request):
 
 @router.get("/toggle-signup", response_class=HTMLResponse)
 def toggle_signup(request: Request):
-    return templates.TemplateResponse("signup.html", {"request": request})
+    return templates.TemplateResponse("forms/signup.html", {"request": request})
 
 
 @router.get("/toggle-signin", response_class=HTMLResponse)
 def toggle_signin(request: Request):
-    return templates.TemplateResponse("signin.html", {"request": request})
+    return templates.TemplateResponse("forms/signin.html", {"request": request})
 
 
 @router.post("/register", response_class=HTMLResponse)
@@ -38,7 +38,7 @@ async def register(
         )
     except user_repository.CreateUserError as e:
         return templates.TemplateResponse(
-            "signup.html",
+            "forms/signup.html",
             {
                 "request": request,
                 "error": str(e),
@@ -65,7 +65,7 @@ async def signin(
         )
     except user_repository.LoginError as e:
         return templates.TemplateResponse(
-            "signin.html",
+            "forms/signin.html",
             {
                 "request": request,
                 "error": str(e),
