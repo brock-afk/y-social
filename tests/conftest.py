@@ -5,7 +5,13 @@ import asyncpg.connection
 
 from y_social.server.main import app
 from fastapi.testclient import TestClient
-from y_social.server.dependencies import db_connection
+from y_social.user.impl import PostgresUserRepository
+from tests.doubles.passwordhasher import PasswordHasherTestDouble
+
+
+@pytest.fixture
+def test_client():
+    return TestClient(app)
 
 
 @pytest.fixture
@@ -29,5 +35,13 @@ async def postgres_connection() -> asyncpg.connection.Connection:
 
 
 @pytest.fixture
-def test_client():
-    return TestClient(app)
+def password_hasher() -> PasswordHasherTestDouble:
+    return PasswordHasherTestDouble()
+
+
+@pytest.fixture
+def user_repository(
+    postgres_connection: asyncpg.connection.Connection,
+    password_hasher: PasswordHasherTestDouble,
+) -> PostgresUserRepository:
+    return PostgresUserRepository(postgres_connection, password_hasher)

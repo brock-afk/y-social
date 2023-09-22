@@ -9,12 +9,11 @@ from y_social.user.impl import PostgresUserRepository
 @pytest.mark.user
 @pytest.mark.integration
 async def test_create_user_inserts_record_into_user_table(
-    postgres_connection: asyncpg.connection.Connection,
+    user_repository: PostgresUserRepository,
 ):
-    user_repository = PostgresUserRepository(postgres_connection)
     await user_repository.create_user(UserIn(username="test", password="test"))
 
-    result = await postgres_connection.fetch(
+    result = await user_repository.db_connection.fetch(
         """
         SELECT id
         FROM user_accounts
@@ -26,10 +25,7 @@ async def test_create_user_inserts_record_into_user_table(
 
 @pytest.mark.user
 @pytest.mark.integration
-async def test_create_user_returns_user_out(
-    postgres_connection: asyncpg.connection.Connection,
-):
-    user_repository = PostgresUserRepository(postgres_connection)
+async def test_create_user_returns_user_out(user_repository: PostgresUserRepository):
     result = await user_repository.create_user(UserIn(username="test", password="test"))
 
     assert isinstance(result, UserOut)
@@ -59,9 +55,8 @@ async def test_register_endpoint_inserts_user_into_database(
 @pytest.mark.user
 @pytest.mark.integration
 async def test_create_user_raises_user_exists_error_if_user_already_exists(
-    postgres_connection: asyncpg.connection.Connection,
+    user_repository: PostgresUserRepository,
 ):
-    user_repository = PostgresUserRepository(postgres_connection)
     await user_repository.create_user(UserIn(username="test", password="test"))
 
     with pytest.raises(PostgresUserRepository.UserExistsError):
@@ -88,3 +83,18 @@ async def test_register_endpoint_returns_user_exists_error_if_user_already_exist
     )
 
     assert len(result) == 1
+
+
+@pytest.mark.user
+@pytest.mark.integration
+async def test_create_user_hashes_password(user_repository: PostgresUserRepository):
+    await user_repository.create_user(UserIn(username="test", password="test"))
+
+    result = await user_repository.db_connection.fetchrow(
+        """
+        SELECT password
+        FROM user_accounts
+        """
+    )
+
+    assert result["password"] != "test"
