@@ -3,6 +3,7 @@ version: '3.8'
 services:
 
   # utility containers
+
   pytest:
     build: .
     volumes:
@@ -15,6 +16,7 @@ services:
       POSTGRES_HOST: postgres_test
     depends_on:
       - postgres_test
+
   postgres_test:
     image: postgres:15.4-alpine
     environment:
@@ -23,7 +25,7 @@ services:
       POSTGRES_DB: test
     volumes:
       - ./sql:/docker-entrypoint-initdb.d/
-  
+
   # main containers
 
   server:
@@ -39,6 +41,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
+
   postgres:
     image: postgres:15.4-alpine
     environment:

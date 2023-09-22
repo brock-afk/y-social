@@ -25,7 +25,7 @@ class PostgresUserRepository(UserRepository):
                 self.password_hasher.hash(user_in.password),
             )
         except asyncpg.exceptions.UniqueViolationError:
-            raise self.UserExistsError(f"User {user_in.username} already exists")
+            raise self.UserExistsError(f"A user with this username already exists")
 
         return UserOut(**result)
 
