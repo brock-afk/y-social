@@ -25,9 +25,25 @@ class PasswordHasher(Protocol):
 
 
 class UserRepository(ABC):
-    class UserExistsError(Exception):
+    class CreateUserError(Exception):
+        pass
+
+    class UserExistsError(CreateUserError):
+        pass
+
+    class LoginError(Exception):
+        pass
+
+    class UserDoesNotExistError(LoginError):
+        pass
+
+    class InvalidPasswordError(LoginError):
         pass
 
     @abstractmethod
     async def create_user(self, user_in: UserIn) -> UserOut:
+        pass  # pragma: no cover
+
+    @abstractmethod
+    async def verify_user(self, user_in: UserIn) -> UserOut:
         pass  # pragma: no cover
