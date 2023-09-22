@@ -40,7 +40,7 @@ class PostgresUserRepository(UserRepository):
         )
 
         if result is None:
-            raise self.UserDoesNotExistError(f"User {user_in.username} does not exist")
+            raise self.UserDoesNotExistError(f"Invalid username")
 
         if not self.password_hasher.verify(user_in.password, result["password"]):
             raise self.InvalidPasswordError("Invalid password")

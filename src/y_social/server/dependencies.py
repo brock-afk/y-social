@@ -1,12 +1,30 @@
 import os
 import asyncpg
+import argon2.exceptions
 import asyncpg.connection
 
 from fastapi import Depends
 from typing import Annotated
+from functools import lru_cache
 from y_social.user.impl import PostgresUserRepository
 from argon2 import PasswordHasher as Argon2PasswordHasher
 from y_social.user.interface import UserRepository, PasswordHasher
+
+
+class Argon2PasswordHasherWrapper(PasswordHasher):
+    def __init__(self) -> None:
+        self.password_hasher = Argon2PasswordHasher()
+
+    def hash(self, password: str) -> str:
+        return self.password_hasher.hash(password)
+
+    def verify(self, password: str, hashed_password: str) -> bool:
+        try:
+            self.password_hasher.verify(hashed_password, password)
+        except argon2.exceptions.VerificationError:
+            return False
+        else:
+            return True
 
 
 async def db_connection() -> asyncpg.connection.Connection:
@@ -18,8 +36,9 @@ async def db_connection() -> asyncpg.connection.Connection:
     )
 
 
+@lru_cache
 def password_hasher() -> PasswordHasher:
-    return Argon2PasswordHasher()
+    return Argon2PasswordHasherWrapper()
 
 
 def user_repository(
