@@ -18,7 +18,7 @@ class PostgresUserRepository(UserRepository):
                 """
                 INSERT INTO user_account (username, password, created_at, updated_at)
                 VALUES ($1, $2, CLOCK_TIMESTAMP(), CLOCK_TIMESTAMP())
-                RETURNING username, created_at, updated_at
+                RETURNING id, username, created_at, updated_at
                 """,
                 user_in.username,
                 self.password_hasher.hash(user_in.password),
@@ -31,7 +31,7 @@ class PostgresUserRepository(UserRepository):
     async def verify_user(self, user_in: UserIn) -> UserOut:
         result = await self.db_connection.fetchrow(
             """
-            SELECT username, password, created_at, updated_at
+            SELECT id, username, password, created_at, updated_at
             FROM user_account
             WHERE username = $1
             """,
@@ -45,6 +45,7 @@ class PostgresUserRepository(UserRepository):
             raise self.InvalidPasswordError("Invalid password")
 
         return UserOut(
+            id=result["id"],
             username=result["username"],
             created_at=result["created_at"],
             updated_at=result["updated_at"],

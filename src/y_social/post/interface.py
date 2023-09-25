@@ -19,3 +19,7 @@ class PostRepository(ABC):
     @abstractmethod
     async def create_post(self, post_in: PostIn) -> PostOut:
         pass  # pragma: no cover
+
+    @abstractmethod
+    async def get_posts(self, user_id: int) -> list[PostOut]:
+        pass  # pragma: no cover
