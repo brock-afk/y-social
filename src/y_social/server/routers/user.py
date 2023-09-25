@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from fastapi import Request, APIRouter, Form, Depends
+from fastapi import Request, APIRouter, Cookie, Form, Depends
 from y_social.server.dependencies import user_repository
 from y_social.user.interface import UserRepository, UserIn
 
@@ -11,8 +11,10 @@ templates = Jinja2Templates(directory="./src/y_social/server/templates")
 
 
 @router.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def index(request: Request, user_id: str = Cookie(None)):
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "user": user_id}
+    )
 
 
 @router.get("/toggle-signup", response_class=HTMLResponse)
@@ -74,6 +76,19 @@ async def signin(
             },
         )
     else:
-        return templates.TemplateResponse(
+        response = templates.TemplateResponse(
             "feed.html", {"request": request, "user": user}
         )
+        response.set_cookie(
+            key="user_id", value=str(user.username), httponly=True, secure=True
+        )
+
+        return response
+
+
+@router.post("/signout", response_class=HTMLResponse)
+async def signout(request: Request):
+    response = templates.TemplateResponse("forms/signin.html", {"request": request})
+    response.delete_cookie(key="user_id")
+
+    return response
