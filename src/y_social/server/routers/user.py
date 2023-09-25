@@ -50,7 +50,7 @@ async def register(
         )
     else:
         return templates.TemplateResponse(
-            "feed.jinja", {"request": request, "user": user}
+            "posts/feed.jinja", {"request": request, "user": user}
         )
 
 
@@ -77,7 +77,7 @@ async def signin(
         )
     else:
         response = templates.TemplateResponse(
-            "feed.jinja", {"request": request, "user": user}
+            "posts/feed.jinja", {"request": request, "user": user}
         )
         response.set_cookie(
             key="user_id", value=str(user.username), httponly=True, secure=True
