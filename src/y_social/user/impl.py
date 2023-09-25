@@ -1,4 +1,3 @@
-import asyncpg
 import asyncpg.connection
 
 from .interface import UserRepository, UserIn, UserOut, PasswordHasher
