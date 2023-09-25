@@ -13,18 +13,18 @@ templates = Jinja2Templates(directory="./src/y_social/server/templates")
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, user_id: str = Cookie(None)):
     return templates.TemplateResponse(
-        "index.html", {"request": request, "user": user_id}
+        "index.jinja", {"request": request, "user": user_id}
     )
 
 
 @router.get("/toggle-signup", response_class=HTMLResponse)
 def toggle_signup(request: Request):
-    return templates.TemplateResponse("forms/signup.html", {"request": request})
+    return templates.TemplateResponse("forms/signup.jinja", {"request": request})
 
 
 @router.get("/toggle-signin", response_class=HTMLResponse)
 def toggle_signin(request: Request):
-    return templates.TemplateResponse("forms/signin.html", {"request": request})
+    return templates.TemplateResponse("forms/signin.jinja", {"request": request})
 
 
 @router.post("/register", response_class=HTMLResponse)
@@ -40,7 +40,7 @@ async def register(
         )
     except user_repository.CreateUserError as e:
         return templates.TemplateResponse(
-            "forms/signup.html",
+            "forms/signup.jinja",
             {
                 "request": request,
                 "error": str(e),
@@ -50,7 +50,7 @@ async def register(
         )
     else:
         return templates.TemplateResponse(
-            "feed.html", {"request": request, "user": user}
+            "feed.jinja", {"request": request, "user": user}
         )
 
 
@@ -67,7 +67,7 @@ async def signin(
         )
     except user_repository.LoginError as e:
         return templates.TemplateResponse(
-            "forms/signin.html",
+            "forms/signin.jinja",
             {
                 "request": request,
                 "error": str(e),
@@ -77,7 +77,7 @@ async def signin(
         )
     else:
         response = templates.TemplateResponse(
-            "feed.html", {"request": request, "user": user}
+            "feed.jinja", {"request": request, "user": user}
         )
         response.set_cookie(
             key="user_id", value=str(user.username), httponly=True, secure=True
@@ -88,7 +88,7 @@ async def signin(
 
 @router.post("/signout", response_class=HTMLResponse)
 async def signout(request: Request):
-    response = templates.TemplateResponse("forms/signin.html", {"request": request})
+    response = templates.TemplateResponse("forms/signin.jinja", {"request": request})
     response.delete_cookie(key="user_id")
 
     return response
