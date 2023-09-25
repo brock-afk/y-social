@@ -6,7 +6,9 @@ import asyncpg.connection
 from fastapi import Depends
 from typing import Annotated
 from functools import lru_cache
+from fastapi.templating import Jinja2Templates
 from y_social.user.impl import PostgresUserRepository
+from y_social.post.impl import PostgresPostCollection
 from argon2 import PasswordHasher as Argon2PasswordHasher
 from y_social.user.interface import UserRepository, PasswordHasher
 
@@ -46,3 +48,14 @@ def user_repository(
     password_hasher: Annotated[PasswordHasher, Depends(password_hasher)],
 ) -> UserRepository:
     return PostgresUserRepository(db_connection, password_hasher)
+
+
+def post_repository(
+    db_connection: Annotated[asyncpg.connection.Connection, Depends(db_connection)],
+):
+    return PostgresPostCollection(db_connection)
+
+
+@lru_cache
+def templates() -> Jinja2Templates:
+    return Jinja2Templates(directory="./src/y_social/server/templates")
