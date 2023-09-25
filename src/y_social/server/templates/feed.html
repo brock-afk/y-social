@@ -1,22 +1,32 @@
-    <!-- Main Content Area -->
-    <div class="container mx-auto py-6">
-        <!-- Post List -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Post Item -->
-            <div class="bg-white rounded-lg shadow-md p-4">
-                <h2 class="text-xl font-semibold mb-2">Post Title 1</h2>
-                <p class="text-gray-600 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget metus in lorem scelerisque gravida.</p>
-                <a href="#" class="text-blue-500 hover:underline">Read More</a>
+<div class="container mx-auto py-6 pt-16 flex">
+    <aside class="w-1/4 pr-6">
+        <ul>
+            <li class="mb-4"><a href="#" class="text-blue-500 hover:underline">Home</a></li>
+            <li class="mb-4"><a href="#" class="text-blue-500 hover:underline">Likes</a></li>
+        </ul>
+    </aside>
+
+    <main class="w-1/2">
+        <div class="bg-white ">
+            <div class="p-4 mb-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Post Title 1</h2>
+                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </div>
-
-            <!-- Post Item -->
-            <div class="bg-white rounded-lg shadow-md p-4">
-                <h2 class="text-xl font-semibold mb-2">Post Title 2</h2>
-                <p class="text-gray-600 mb-4">Praesent in volutpat enim. Phasellus tincidunt, mi non scelerisque euismod, est nunc mattis dolor.</p>
-                <a href="#" class="text-blue-500 hover:underline">Read More</a>
+            <div class="p-4 mb-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold">Post Title 2</h2>
+                <p class="text-gray-600">Praesent in volutpat enim. Phasellus tincidunt, mi non scelerisque euismod.</p>
             </div>
-
-            <!-- Add more Post Items as needed -->
-
         </div>
-    </div>
+    </main>
+
+    <aside class="w-1/4 pl-6">
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <h2 class="text-xl font-semibold mb-4">Promotions</h2>
+            <ul>
+                <li class="mb-2"><a href="#" class="text-blue-500 hover:underline">Promotion 1</a></li>
+                <li class="mb-2"><a href="#" class="text-blue-500 hover:underline">Promotion 2</a></li>
+                <li class="mb-2"><a href="#" class="text-blue-500 hover:underline">Promotion 3</a></li>
+            </ul>
+        </div>
+    </aside>
+</div>
