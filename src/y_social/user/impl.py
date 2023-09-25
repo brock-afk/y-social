@@ -17,7 +17,7 @@ class PostgresUserRepository(UserRepository):
         try:
             result = await self.db_connection.fetchrow(
                 """
-                INSERT INTO user_accounts (username, password, created_at, updated_at)
+                INSERT INTO user_account (username, password, created_at, updated_at)
                 VALUES ($1, $2, CLOCK_TIMESTAMP(), CLOCK_TIMESTAMP())
                 RETURNING username, created_at, updated_at
                 """,
@@ -33,7 +33,7 @@ class PostgresUserRepository(UserRepository):
         result = await self.db_connection.fetchrow(
             """
             SELECT username, password, created_at, updated_at
-            FROM user_accounts
+            FROM user_account
             WHERE username = $1
             """,
             user_in.username,
