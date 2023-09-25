@@ -7,6 +7,7 @@ from fastapi import Depends
 from typing import Annotated
 from functools import lru_cache
 from fastapi.templating import Jinja2Templates
+from y_social.post.interface import PostRepository
 from y_social.user.impl import PostgresUserRepository
 from y_social.post.impl import PostgresPostCollection
 from argon2 import PasswordHasher as Argon2PasswordHasher
@@ -52,7 +53,7 @@ def user_repository(
 
 def post_repository(
     db_connection: Annotated[asyncpg.connection.Connection, Depends(db_connection)],
-):
+) -> PostRepository:
     return PostgresPostCollection(db_connection)
 
 

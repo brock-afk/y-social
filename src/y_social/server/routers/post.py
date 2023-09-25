@@ -17,6 +17,7 @@ async def create_post(
     content: str = Form(...),
 ):
     await post_repostiory.create_post(PostIn(text=content, created_by=user))
+    posts = await post_repostiory.get_posts(user)
     return templates.TemplateResponse(
-        "posts/feed.jinja", {"request": request, "user": user}
+        "posts/feed.jinja", {"request": request, "user": user, "posts": posts}
     )
