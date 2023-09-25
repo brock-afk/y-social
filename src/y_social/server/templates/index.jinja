@@ -15,7 +15,7 @@
         </nav>
         <div id="page-content">
             {% if user %}
-                {%include 'feed.jinja'%}
+                {%include 'posts/feed.jinja'%}
             {% else %}
                 {% include 'forms/signin.jinja' %}
             {% endif %}
