@@ -15,9 +15,9 @@
         </nav>
         <div id="page-content">
             {% if user %}
-                {%include 'feed.html'%}
+                {%include 'feed.jinja'%}
             {% else %}
-                {% include 'forms/signin.html' %}
+                {% include 'forms/signin.jinja' %}
             {% endif %}
         </div>
     </body>
