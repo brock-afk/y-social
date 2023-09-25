@@ -19,3 +19,15 @@ class PostgresPostCollection(PostRepository):
         )
 
         return PostOut(**result)
+
+    async def get_posts(self, user_id: int) -> list[PostOut]:
+        results = await self.db_connection.fetch(
+            """
+            SELECT text, created_by, created_at
+            FROM post
+            WHERE created_by = $1
+            """,
+            user_id,
+        )
+
+        return [PostOut(**result) for result in results]
