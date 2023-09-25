@@ -16,7 +16,7 @@ async def test_create_user_inserts_record_into_user_table(
     result = await user_repository.db_connection.fetch(
         """
         SELECT id
-        FROM user_accounts
+        FROM user_account
         """
     )
 
@@ -45,7 +45,7 @@ async def test_register_endpoint_inserts_user_into_database(
     result = await postgres_connection.fetch(
         """
         SELECT id
-        FROM user_accounts
+        FROM user_account
         """
     )
 
@@ -78,7 +78,7 @@ async def test_register_endpoint_returns_user_exists_error_if_user_already_exist
     result = await postgres_connection.fetch(
         """
         SELECT id
-        FROM user_accounts
+        FROM user_account
         """
     )
 
@@ -93,7 +93,7 @@ async def test_create_user_hashes_password(user_repository: PostgresUserReposito
     result = await user_repository.db_connection.fetchrow(
         """
         SELECT password
-        FROM user_accounts
+        FROM user_account
         """
     )
 

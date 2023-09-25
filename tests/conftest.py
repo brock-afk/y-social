@@ -27,7 +27,7 @@ async def postgres_connection() -> asyncpg.connection.Connection:
     except Exception:
         pytest.skip("Could not connect to Postgres")
 
-    await connection.execute("DELETE FROM user_accounts")
+    await connection.execute("DELETE FROM user_account")
 
     yield connection
 
