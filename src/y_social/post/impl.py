@@ -26,6 +26,7 @@ class PostgresPostCollection(PostRepository):
             SELECT text, created_by, created_at
             FROM post
             WHERE created_by = $1
+            ORDER BY created_at DESC
             """,
             user_id,
         )
