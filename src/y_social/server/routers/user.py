@@ -14,13 +14,17 @@ async def index(
     request: Request,
     templates: Annotated[Jinja2Templates, Depends(templates)],
     post_repository: Annotated[PostRepository, Depends(post_repository)],
-    user_id: str = Cookie(None),
+    user_id: int = Cookie(None),
 ):
     if user_id is not None:
-        posts = await post_repository.get_posts(int(user_id))
-    return templates.TemplateResponse(
-        "index.jinja", {"request": request, "user": user_id, "posts": posts}
-    )
+        posts = await post_repository.get_posts(user_id)
+        return templates.TemplateResponse(
+            "feed/index.jinja", {"request": request, "user": user_id, "posts": posts}
+        )
+    else:
+        return templates.TemplateResponse(
+            "register/index.jinja", {"request": request, "user": user_id}
+        )
 
 
 @router.get("/toggle-signup", response_class=HTMLResponse)
@@ -28,7 +32,7 @@ def toggle_signup(
     request: Request,
     templates: Annotated[Jinja2Templates, Depends(templates)],
 ):
-    return templates.TemplateResponse("forms/signup.jinja", {"request": request})
+    return templates.TemplateResponse("register/signup.jinja", {"request": request})
 
 
 @router.get("/toggle-signin", response_class=HTMLResponse)
@@ -36,7 +40,7 @@ def toggle_signin(
     request: Request,
     templates: Annotated[Jinja2Templates, Depends(templates)],
 ):
-    return templates.TemplateResponse("forms/signin.jinja", {"request": request})
+    return templates.TemplateResponse("register/signin.jinja", {"request": request})
 
 
 @router.post("/register", response_class=HTMLResponse)
@@ -53,7 +57,7 @@ async def register(
         )
     except user_repository.CreateUserError as e:
         return templates.TemplateResponse(
-            "forms/signup.jinja",
+            "register/signup.jinja",
             {
                 "request": request,
                 "error": str(e),
@@ -82,7 +86,7 @@ async def signin(
         )
     except user_repository.LoginError as e:
         return templates.TemplateResponse(
-            "forms/signin.jinja",
+            "register/signin.jinja",
             {
                 "request": request,
                 "error": str(e),
@@ -93,7 +97,7 @@ async def signin(
     else:
         posts = await post_repository.get_posts(user.id)
         response = templates.TemplateResponse(
-            "posts/feed.jinja", {"request": request, "user_id": user, "posts": posts}
+            "feed/posts.jinja", {"request": request, "user_id": user, "posts": posts}
         )
         response.set_cookie(
             "user_id", str(user.id), httponly=True, secure=True, samesite="strict"
@@ -114,7 +118,7 @@ async def signout(
     request: Request,
     templates: Annotated[Jinja2Templates, Depends(templates)],
 ):
-    response = templates.TemplateResponse("forms/signin.jinja", {"request": request})
+    response = templates.TemplateResponse("register/signin.jinja", {"request": request})
     response.delete_cookie(key="user_id")
 
     return response
