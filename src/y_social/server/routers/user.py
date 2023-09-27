@@ -67,7 +67,7 @@ async def register(
         )
     else:
         return templates.TemplateResponse(
-            "posts/feed.jinja", {"request": request, "user": user, "posts": []}
+            "feed/posts.jinja", {"request": request, "user": user, "posts": []}
         )
 
 
