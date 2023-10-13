@@ -11,6 +11,7 @@ class PostIn(BaseModel):
 
 class PostOut(BaseModel):
     text: str
+    username: str
     created_by: int
     created_at: datetime.datetime
 
