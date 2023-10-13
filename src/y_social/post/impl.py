@@ -23,10 +23,11 @@ class PostgresPostCollection(PostRepository):
     async def get_posts(self, user_id: int) -> list[PostOut]:
         results = await self.db_connection.fetch(
             """
-            SELECT text, created_by, created_at
+            SELECT post.text, post.created_by, user_account.username, post.created_at
             FROM post
-            WHERE created_by = $1
-            ORDER BY created_at DESC
+            INNER JOIN user_account on post.created_by = user_account.id
+            WHERE post.created_by = $1
+            ORDER BY post.created_at DESC
             """,
             user_id,
         )
